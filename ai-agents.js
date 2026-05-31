@@ -38,7 +38,15 @@ const analyzeGoal = async () => {
   try {
     const completion = await openai.chat.completions.create({
       model: "openai/gpt-oss-120b:free",
-      messages: [{ role: "user", content: prompt }],
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are an expert personal productivity coach and learning specialist. Create actionable, structured plans.",
+        },
+        { role: "user", content: prompt },
+      ],
+      temperature: 0.7,
     });
 
     console.log("From analyzeGoal: ", completion.choices[0].message.content);
