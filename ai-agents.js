@@ -14,10 +14,7 @@ async function main() {
 
   console.log("From main: ", completion.choices[0].message.content);
 }
-const analyzeGoal = async () => {
-  const goalText = "learn JavaScript";
-  const durationDays = 30;
-
+const analyzeGoal = async (goalText, durationDays) => {
   const prompt = `User wants to ${goalText} within ${durationDays} days. 
     create a structured learning/execution plan with:
     1. main milestones for each week.
@@ -49,13 +46,14 @@ const analyzeGoal = async () => {
       temperature: 0.7,
     });
 
-    console.log("From analyzeGoal: ", completion.choices[0].message.content);
+    const content = completion.choices[0].message.content;
+    const jsonMatch = content.match(/\{[\s\S]*\}/);
+    return JSON.parse(jsonMatch);
   } catch (err) {
     console.error(err);
   }
 };
 
-console.log("Running main function...");
-main();
-console.log("Analyzing goal...");
-analyzeGoal();
+module.exports = {
+  analyzeGoal,
+};
